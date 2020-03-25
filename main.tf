@@ -57,6 +57,13 @@ data "aws_iam_policy_document" "default" {
   }
 }
 
+data "aws_iam_policy_document" "merged_policy" {
+  count = var.enabled ? 1 : 0
+
+  source_json   = join("", data.aws_iam_policy_document.default.*.json)
+  override_json = var.policy
+}
+
 module "s3_bucket" {
   source                             = "git::https://github.com/cloudposse/terraform-aws-s3-log-storage.git?ref=tags/0.8.0"
   enabled                            = var.enabled
@@ -66,7 +73,7 @@ module "s3_bucket" {
   name                               = var.name
   region                             = var.region
   acl                                = var.acl
-  policy                             = join("", data.aws_iam_policy_document.default.*.json)
+  policy                             = join("", data.aws_iam_policy_document.merged_policy.*.json)
   force_destroy                      = var.force_destroy
   versioning_enabled                 = var.versioning_enabled
   lifecycle_rule_enabled             = var.lifecycle_rule_enabled
