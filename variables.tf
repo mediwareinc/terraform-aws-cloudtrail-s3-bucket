@@ -52,12 +52,6 @@ variable "acl" {
   default     = "log-delivery-write"
 }
 
-variable "policy" {
-  type        = string
-  description = "A valid bucket policy JSON document. Note that if the policy document is not specific enough (but still valid), Terraform may view the policy as constantly changing in a terraform plan. In this case, please make sure you use the verbose/specific version of the policy"
-  default     = ""
-}
-
 variable "lifecycle_prefix" {
   type        = string
   description = "Prefix filter. Used to manage object lifecycle events"
@@ -135,4 +129,9 @@ variable "kms_master_key_arn" {
   type        = string
   description = "The AWS KMS master key ARN used for the SSE-KMS encryption. This can only be used when you set the value of sse_algorithm as aws:kms. The default aws/s3 AWS KMS master key is used if this element is absent while the sse_algorithm is aws:kms"
   default     = ""
+}
+
+variable "read_access_account" {
+  description = "The id of an account given read access to read object buckets "
+  type        = string
 }

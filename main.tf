@@ -55,13 +55,26 @@ data "aws_iam_policy_document" "default" {
       ]
     }
   }
-}
 
-data "aws_iam_policy_document" "merged_policy" {
-  count = var.enabled ? 1 : 0
+  statement {
+    sid = "read_access"
 
-  source_json   = join("", data.aws_iam_policy_document.default.*.json)
-  override_json = var.policy
+    actions = [
+      "s3:Get*",
+      "s3:List*"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${module.label.id}",
+    ]
+
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.read_access_account}:root"]
+    }
+  }
 }
 
 module "s3_bucket" {
@@ -73,7 +86,7 @@ module "s3_bucket" {
   name                               = var.name
   region                             = var.region
   acl                                = var.acl
-  policy                             = join("", data.aws_iam_policy_document.merged_policy.*.json)
+  policy                             = join("", data.aws_iam_policy_document.default.*.json)
   force_destroy                      = var.force_destroy
   versioning_enabled                 = var.versioning_enabled
   lifecycle_rule_enabled             = var.lifecycle_rule_enabled
