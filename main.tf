@@ -55,6 +55,26 @@ data "aws_iam_policy_document" "default" {
       ]
     }
   }
+
+  statement {
+    sid = "read_access"
+
+    actions = [
+      "s3:Get*",
+      "s3:List*"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${module.label.id}",
+    ]
+
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.read_access_account}:root"]
+    }
+  }
 }
 
 module "s3_bucket" {
