@@ -7,7 +7,11 @@ module "label" {
   name        = var.name
   delimiter   = var.delimiter
   attributes  = var.attributes
-  tags        = var.tags
+  tags        = local.tags
+}
+
+locals {
+  tags = merge(var.tags, var.extra_tags)
 }
 
 data "aws_iam_policy_document" "default" {
@@ -102,5 +106,5 @@ module "s3_bucket" {
   kms_master_key_arn                 = var.kms_master_key_arn
   delimiter                          = var.delimiter
   attributes                         = var.attributes
-  tags                               = var.tags
+  tags                               = local.tags
 }

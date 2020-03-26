@@ -35,9 +35,20 @@ variable "attributes" {
 }
 
 variable "tags" {
+  description = "Default tags."
+  type = object({
+    Owner        = string
+    BusinessUnit = string
+    Environment  = string
+    Application  = string
+    Service      = string
+  })
+}
+
+variable "extra_tags" {
+  description = "Extra optional tags for the cluster."
   type        = map(string)
   default     = {}
-  description = "Additional tags (e.g. `map('BusinessUnit','XYZ')`"
 }
 
 variable "enabled" {
