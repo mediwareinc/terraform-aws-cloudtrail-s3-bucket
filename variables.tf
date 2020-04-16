@@ -142,7 +142,7 @@ variable "kms_master_key_arn" {
   default     = ""
 }
 
-variable "read_access_account" {
-  description = "The id of an account given read access to read object buckets "
-  type        = string
+variable "read_access_arns" {
+  description = "The list of principals that can read from the bucket "
+  type        = list(string)
 }

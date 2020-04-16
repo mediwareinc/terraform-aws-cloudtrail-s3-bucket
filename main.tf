@@ -76,7 +76,7 @@ data "aws_iam_policy_document" "default" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.read_access_account}:root"]
+      identifiers = var.read_access_arns
     }
   }
 }
