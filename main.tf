@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "default" {
 
     principals {
       type        = "Service"
-      identifiers = ["cloudtrail.amazonaws.com"]
+      identifiers = ["config.amazonaws.com", "cloudtrail.amazonaws.com"]
     }
 
     actions = [
@@ -58,6 +58,23 @@ data "aws_iam_policy_document" "default" {
         "bucket-owner-full-control",
       ]
     }
+  }
+
+  statement {
+    sid = "AWSConfigListBucket"
+
+    principals {
+      type        = "Service"
+      identifiers = ["config.amazonaws.com"]
+    }
+
+    actions = [
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${module.label.id}",
+    ]
   }
 
   statement {
