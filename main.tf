@@ -98,7 +98,8 @@ data "aws_iam_policy_document" "default" {
   }
 
   dynamic "statement" {
-    for_each = var.read ? ["replicate_write"] : []
+    for_each = length(var.replication_access_arns) > 0 ? ["replicate_write"] : []
+
     content {
       sid    = "replicate_write"
       effect = "Allow"
@@ -117,7 +118,8 @@ data "aws_iam_policy_document" "default" {
   }
 
   dynamic "statement" {
-    for_each = var.read ? ["replicate_versioning"] : []
+    for_each = length(var.replication_access_arns) > 0 ? ["replicate_versioning"] : []
+
     content {
       sid    = "replicate_versioning"
       effect = "Allow"
