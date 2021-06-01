@@ -96,6 +96,46 @@ data "aws_iam_policy_document" "default" {
       identifiers = var.read_access_arns
     }
   }
+
+  dynamic "statement" {
+    for_each = length(var.replication_access_arns) > 0 ? ["replicate_write"] : []
+
+    content {
+      sid    = "replicate_write"
+      effect = "Allow"
+      actions = [
+        "s3:ReplicateObject",
+        "s3:ReplicateDelete"
+      ]
+      resources = [
+        "arn:aws:s3:::${module.label.id}/*",
+      ]
+      principals {
+        type        = "AWS"
+        identifiers = var.replication_access_arns
+      }
+    }
+  }
+
+  dynamic "statement" {
+    for_each = length(var.replication_access_arns) > 0 ? ["replicate_versioning"] : []
+
+    content {
+      sid    = "replicate_versioning"
+      effect = "Allow"
+      actions = [
+        "s3:GetBucketVersioning",
+        "s3:PutBucketVersioning"
+      ]
+      resources = [
+        "arn:aws:s3:::${module.label.id}",
+      ]
+      principals {
+        type        = "AWS"
+        identifiers = var.replication_access_arns
+      }
+    }
+  }
 }
 
 module "s3_bucket" {
