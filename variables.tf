@@ -140,3 +140,9 @@ variable "read_access_arns" {
   description = "The list of principals that can read from the bucket "
   type        = list(string)
 }
+
+variable "replication_access_arns" {
+  description = "List of arns to allow for replication into the bucket"
+  type        = list(string)
+  default     = []
+}
