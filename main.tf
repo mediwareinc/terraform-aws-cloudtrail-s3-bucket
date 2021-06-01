@@ -104,8 +104,9 @@ data "aws_iam_policy_document" "default" {
       sid    = "replicate_write"
       effect = "Allow"
       actions = [
+        "s3:ObjectOwnerOverrideToBucketOwner",
+        "s3:ReplicateDelete",
         "s3:ReplicateObject",
-        "s3:ReplicateDelete"
       ]
       resources = [
         "arn:aws:s3:::${module.label.id}/*",
